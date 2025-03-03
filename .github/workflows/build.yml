@@ -7,11 +7,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        build_type: [release]
+        build_type: [Release]
         enable_ui: [on]
         include:
           - os: windows-latest
-            build_type: release
+            build_type: Release
             enable_ui: on     
     steps:
     - uses: actions/checkout@v4
@@ -77,13 +77,13 @@ jobs:
         curl -L https://github.com/ADAIBLOG/skia/releases/download/skia/skia.zip --output skia.zip 
         7z x skia.zip 
         cmake -s . -B build -G Ninja \  
-          -DCMAKE BUILD_TYPE-${{ matrix.build_type }} \ 
-          -DENABLE UI-${{ matrix.enable_ui }} \ 
-          -DENABLE CCACHE=$enable_ccache \
-          -DLAF BACKEND=skia \ 
-          -DSKIADIR-./skial \
-          -DSKIA LIBRARY DIR=./skia/out/Release-x64 \
-          -DSKIA LIBRARY=./skia/out/Release-x64/skia.lib
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \ 
+          -DENABLE_UI=${{ matrix.enable_ui }} \ 
+          -DENABLE_CCACHE=$enable_ccache \
+          -DLAF_BACKEND=skia \ 
+          -DSKIA_DIR=./skial \
+          -DSKIA_LIBRARY_DIR=./skia/out/Release-x64 \
+          -DSKIA_LIBRARY=./skia/out/Release-x64/skia.lib
     - name: Compiling
       shell: bash
       run: |
