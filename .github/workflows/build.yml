@@ -7,16 +7,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        build_type: [RelWithDebInfo]
-        ui: [gui]
-        scripting: [lua]
-        exclude:
-          - build_type: Debug
-            ui: gui
-          - build_type: RelWithDebInfo
-            ui: cli
-          - build_type: RelWithDebInfo
-            scripting: noscripts
+        build_type: [release]
+        enable_ui: [on]
+        include:
+          - os: windows-latest
+            build_type: release
+            enable_ui: on     
     steps:
     - uses: actions/checkout@v4
       with:
@@ -78,16 +74,16 @@ jobs:
         else
           export skia_arch=x64
         fi
-
-        cmake -S . -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
-          -DENABLE_TESTS=ON \
-          -DENABLE_SCRIPTING=$enable_scripting \
-          -DENABLE_CCACHE=$enable_ccache \
-          -DLAF_BACKEND=$laf_backend \
-          -DSKIA_DIR=skia \
-          -DSKIA_LIBRARY_DIR=skia/out/Release-$skia_arch
+        curl -L https://github.com/ADAIBLOG/skia/releases/download/skia/skia.zip --output skia.zip 
+        7z x skia.zip 
+        cmake -s . -B build -G Ninja \  
+          -DCMAKE BUILD_TYPE-${{ matrix.build_type }} \ 
+          -DENABLE UI-${{ matrix.enable_ui }} \ 
+          -DENABLE CCACHE=$enable_ccache \
+          -DLAF BACKEND=skia \ 
+          -DSKIADIR-./skial \
+          -DSKIA LIBRARY DIR=./skia/out/Release-x64 \
+          -DSKIA LIBRARY=./skia/out/Release-x64/skia.lib
     - name: Compiling
       shell: bash
       run: |
